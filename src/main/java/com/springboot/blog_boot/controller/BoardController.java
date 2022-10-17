@@ -68,7 +68,7 @@ public class BoardController {
     }
 
     @ApiOperation(value = "블로그 글 보기")
-    @ApiImplicitParam(name = "seq", value = "조회할 글 번호", required = true, paramType = "path", example = "0")
+    @ApiImplicitParam(name = "seq", value = "조회할 글 번호", required = true, paramType = "path")
     @GetMapping("/document/{seq}")
     public BoardVO document(@PathVariable int seq, Model model) {
         // 블로그 글 보기
@@ -86,7 +86,7 @@ public class BoardController {
     @ApiOperation(value = "글 추천")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "추천자"),
-            @ApiImplicitParam(name = "seq", value = "추천할 글 번호", required = true, example = "0")
+            @ApiImplicitParam(name = "seq", value = "추천할 글 번호", required = true)
     })
     @PostMapping("/document/{seq}/like")
     public LikeDocumentResult post_like(@PathVariable int seq, @RequestParam(required = false) String id, HttpServletRequest request, Model model) {
@@ -98,21 +98,15 @@ public class BoardController {
          * 1: 추천 성공
          */
         int result = -1;
+        id = setID(id, request);
         Map<String, Object> input = new HashMap<>();
 
+        input.put("id", id);
         input.put("seq", seq);
 
-        if (id == null) {   // 로그인 중이 아닐 때
-            input.put("id", request.getRemoteAddr());
-        } else {    // 로그인 중일 때
-            input.put("id", id);
+        if (!boardDao.isLike(input)) {
+            result = boardDao.like(input);
         }
-
-        if (id == null) {   // 로그인 중이 아닐 때
-            id = request.getRemoteAddr();   // ip 가져오기
-        }
-
-        input.put("id", id);
 
         boardDao.updateLikeCnt(seq);
         model.addAttribute("result", result);
@@ -123,7 +117,7 @@ public class BoardController {
     @ApiOperation("글 추천 취소")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "추천자"),
-            @ApiImplicitParam(name = "seq", value = "추천 취소할 글 번호", required = true, example = "0")
+            @ApiImplicitParam(name = "seq", value = "추천 취소할 글 번호", required = true)
     })
     @DeleteMapping("/document/{seq}/like")
     public LikeDocumentResult delete_like(@PathVariable int seq, @RequestParam(required = false) String id, HttpServletRequest request, Model model) {
@@ -134,18 +128,13 @@ public class BoardController {
          * 0: 추천하지 않은 게시물
          * 1: 추천 취소 성공
          */
-        int result = -1;
+        id = setID(id, request);
         Map<String, Object> input = new HashMap<>();
 
+        input.put("id", id);
         input.put("seq", seq);
 
-        if (id == null) {   // 로그인 중이 아닐 때
-            id = request.getRemoteAddr();   // ip 가져오기
-        }
-
-        input.put("id", id);
-
-        result = boardDao.cancelLike(input);
+        int result = boardDao.cancelLike(input);
 
         boardDao.updateLikeCnt(seq);
         model.addAttribute("result", result);
@@ -166,7 +155,6 @@ public class BoardController {
             @RequestParam String content,
             @RequestParam(required = false) String category_id,
             @ApiParam("업로드 할 썸네일") @RequestBody(required = false) MultipartFile uploadFile,
-            HttpServletRequest request,
             Model model) throws IOException {
         // 글 작성
         int result = -1;
@@ -203,7 +191,7 @@ public class BoardController {
             @ApiImplicitParam(name = "seq", value = "수정할 글 번호", required = true, paramType = "path"),
             @ApiImplicitParam(name = "subject", value = "글 제목", required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "content", value = "글 내용", required = true, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "category_id", value = "글을 분류할 카테고리의 일련번호", dataType = "int", paramType = "query", example = "0")
+            @ApiImplicitParam(name = "category_id", value = "글을 분류할 카테고리의 일련번호", dataType = "int", paramType = "query")
 
     })
     @PostMapping(value = "/document/update/{seq}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -213,7 +201,6 @@ public class BoardController {
             @RequestParam String content,
             @RequestParam(required = false) String category_id,
             @ApiParam("업로드 할 썸네일") @RequestBody(required = false) MultipartFile uploadFile,
-            HttpServletRequest request,
             Model model) throws IOException {
         // 글 수정
         int result = -1;
@@ -247,9 +234,9 @@ public class BoardController {
     }
 
     @ApiOperation("글 삭제")
-    @ApiImplicitParam(name = "seq", value = "삭제할 글 번호", required = true, example = "0")
+    @ApiImplicitParam(name = "seq", value = "삭제할 글 번호", required = true)
     @DeleteMapping("/document/delete/{seq}")
-    public DeleteDocumentResult delete(@PathVariable int seq, HttpServletRequest request, Model model) {
+    public DeleteDocumentResult delete(@PathVariable int seq, Model model) {
         // 글 삭제
         String thumbnail = boardDao.getDocument(seq).getThumbnail();
         if (thumbnail != null && !thumbnail.isBlank()) {
@@ -261,5 +248,9 @@ public class BoardController {
         model.addAttribute("result", result);
 
         return new DeleteDocumentResult(seq, result);
+    }
+
+    private String setID(String id, HttpServletRequest request) {
+        return id == null ? request.getRemoteAddr() : id;
     }
 }
