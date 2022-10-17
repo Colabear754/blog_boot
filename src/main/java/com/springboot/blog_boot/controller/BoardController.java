@@ -222,7 +222,6 @@ public class BoardController {
         Files.createDirectories(Paths.get(dir.toString()));    // 썸네일을 저장할 디렉토리가 없으면 생성
 
         if (uploadFile != null && !uploadFile.isEmpty()) {
-            dir.append("\\");
             File pre_thumb = new File(dir + document.getThumbnail());   // 기존 썸네일
             String extension = FilenameUtils.getExtension(uploadFile.getOriginalFilename());    // 확장자
             long timeMillis = System.currentTimeMillis();   // 무작위 파일명을 위한 현재시간
@@ -252,7 +251,7 @@ public class BoardController {
         // 글 삭제
         String thumbnail = boardDao.getDocument(seq).getThumbnail();
         if (thumbnail != null && !thumbnail.isBlank()) {
-            File realFile = new File(request.getServletContext().getRealPath("\\resources\\blog\\img") + "\\" + thumbnail);
+            File realFile = new File("D:\\blog\\img\\" + thumbnail);
             realFile.delete();
         }
 
