@@ -1,4 +1,4 @@
-package com.example.blog.domain;
+package com.springboot.blog_boot.domain;
 
 public class CategoryVO {
     private int category_id;

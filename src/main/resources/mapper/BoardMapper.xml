@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
-<mapper namespace="com.example.blog.mapper.BoardMapper">
+<mapper namespace="com.springboot.blog_boot.mapper.BoardMapper">
     <select id="getDocuments" resultType="BoardVO">
         select a.*
         from (

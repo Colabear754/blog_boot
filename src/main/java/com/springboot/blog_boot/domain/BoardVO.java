@@ -1,7 +1,4 @@
-package com.example.blog.domain;
-
-import io.swagger.annotations.ApiModelProperty;
-import org.springframework.web.multipart.MultipartFile;
+package com.springboot.blog_boot.domain;
 
 import java.sql.Timestamp;
 

@@ -1,7 +1,7 @@
-package com.example.blog.controller;
+package com.springboot.blog_boot.controller;
 
-import com.example.blog.domain.CategoryVO;
-import com.example.blog.mapper.CategoryMapper;
+import com.springboot.blog_boot.domain.CategoryVO;
+import com.springboot.blog_boot.mapper.CategoryMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -9,7 +9,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.HashMap;
 import java.util.Map;

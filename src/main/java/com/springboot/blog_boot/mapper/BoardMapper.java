@@ -1,10 +1,12 @@
-package com.example.blog.mapper;
+package com.springboot.blog_boot.mapper;
 
-import com.example.blog.domain.BoardVO;
+import com.springboot.blog_boot.domain.BoardVO;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 import java.util.Map;
 
+@Mapper
 public interface BoardMapper {
     public List<BoardVO> getDocuments(Map<String, Object> params);
     public BoardVO getDocument(int seq);

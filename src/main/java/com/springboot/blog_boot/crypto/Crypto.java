@@ -1,4 +1,4 @@
-package com.example.blog.crypto;
+package com.springboot.blog_boot.crypto;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;

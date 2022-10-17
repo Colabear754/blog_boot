@@ -1,9 +1,12 @@
-package com.example.blog.controller;
+package com.springboot.blog_boot.controller;
 
-import com.example.blog.crypto.Crypto;
-import com.example.blog.domain.MemberVO;
-import com.example.blog.mapper.MemberMapper;
-import io.swagger.annotations.*;
+import com.springboot.blog_boot.crypto.Crypto;
+import com.springboot.blog_boot.domain.MemberVO;
+import com.springboot.blog_boot.mapper.MemberMapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +21,7 @@ import java.util.Map;
 @RequestMapping("/members/*")
 public class MemberController {
     @Autowired
-    MemberMapper memberDao;
+    private MemberMapper memberDao;
     private final Crypto crypt = new Crypto();
 
     @ApiOperation("ID 중복확인")

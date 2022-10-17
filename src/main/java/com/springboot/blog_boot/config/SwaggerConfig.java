@@ -1,4 +1,4 @@
-package com.example.blog.config;
+package com.springboot.blog_boot.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,11 +22,11 @@ public class SwaggerConfig {
                 .produces(getProduceContentTypes())
                 .apiInfo(new ApiInfoBuilder()
                         .title("블로그 API 테스트")
-                        .description("")
+                        .description("이건 Spring Boot로 한거")
                         .version("1.0.0")
                         .build())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.example.blog"))
+                .apis(RequestHandlerSelectors.basePackage("com.springboot.blog_boot"))
                 .paths(PathSelectors.any())
                 .build();
     }

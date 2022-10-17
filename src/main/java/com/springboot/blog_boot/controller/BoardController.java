@@ -1,7 +1,7 @@
-package com.example.blog.controller;
+package com.springboot.blog_boot.controller;
 
-import com.example.blog.domain.BoardVO;
-import com.example.blog.mapper.BoardMapper;
+import com.springboot.blog_boot.domain.BoardVO;
+import com.springboot.blog_boot.mapper.BoardMapper;
 import io.swagger.annotations.*;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +66,7 @@ public class BoardController {
     }
 
     @ApiOperation(value = "블로그 글 보기")
-    @ApiImplicitParam(name = "seq", value = "조회할 글 번호", required = true, paramType = "path")
+    @ApiImplicitParam(name = "seq", value = "조회할 글 번호", required = true, paramType = "path", example = "0")
     @GetMapping("/document/{seq}")
     public BoardVO document(@PathVariable int seq, Model model) {
         // 블로그 글 보기
@@ -84,7 +84,7 @@ public class BoardController {
     @ApiOperation(value = "글 추천")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "추천자"),
-            @ApiImplicitParam(name = "seq", value = "추천할 글 번호", required = true)
+            @ApiImplicitParam(name = "seq", value = "추천할 글 번호", required = true, example = "0")
     })
     @PostMapping("/document/{seq}/like")
     public String post_like(@PathVariable int seq, @RequestParam(required = false) String id, HttpServletRequest request, Model model) {
@@ -121,7 +121,7 @@ public class BoardController {
     @ApiOperation("글 추천 취소")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "추천자"),
-            @ApiImplicitParam(name = "seq", value = "추천 취소할 글 번호", required = true)
+            @ApiImplicitParam(name = "seq", value = "추천 취소할 글 번호", required = true, example = "0")
     })
     @DeleteMapping("/document/{seq}/like")
     public String delete_like(@PathVariable int seq, @RequestParam(required = false) String id, HttpServletRequest request, Model model) {
@@ -168,13 +168,12 @@ public class BoardController {
             Model model) throws IOException {
         // 글 작성
         int result = -1;
-        StringBuilder dir = new StringBuilder(request.getServletContext().getRealPath("\\resources\\blog\\img")); // 썸네일 저장경로
+        StringBuilder dir = new StringBuilder("D:\\blog\\img\\"); // 썸네일 저장경로
         String filename = null; // 썸네일 파일 명
 
         Files.createDirectories(Paths.get(dir.toString()));    // 썸네일을 저장할 디렉토리가 없으면 생성
 
         if (uploadFile != null && !uploadFile.isEmpty()) {
-            dir.append("\\");
             String extension = FilenameUtils.getExtension(uploadFile.getOriginalFilename());    // 확장자
             long timeMillis = System.currentTimeMillis();   // 무작위 파일명을 위한 현재시간
             int random = (int) (Math.random() * 90000) + 10000;    // 무작위 파일명을 위한 10000~99999의 무작위 정수
@@ -202,7 +201,7 @@ public class BoardController {
             @ApiImplicitParam(name = "seq", value = "수정할 글 번호", required = true, paramType = "path"),
             @ApiImplicitParam(name = "subject", value = "글 제목", required = true, dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "content", value = "글 내용", required = true, dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "category_id", value = "글을 분류할 카테고리의 일련번호", dataType = "int", paramType = "query")
+            @ApiImplicitParam(name = "category_id", value = "글을 분류할 카테고리의 일련번호", dataType = "int", paramType = "query", example = "0")
 
     })
     @PostMapping(value = "/document/update/{seq}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -217,7 +216,7 @@ public class BoardController {
         // 글 수정
         int result = -1;
         BoardVO document = boardDao.getDocument(seq);
-        StringBuilder dir = new StringBuilder(request.getServletContext().getRealPath("\\resources\\blog\\img")); // 썸네일 저장경로
+        StringBuilder dir = new StringBuilder("D:\\blog\\img\\"); // 썸네일 저장경로
         String filename; // 썸네일 파일 명
 
         Files.createDirectories(Paths.get(dir.toString()));    // 썸네일을 저장할 디렉토리가 없으면 생성
@@ -247,7 +246,7 @@ public class BoardController {
     }
 
     @ApiOperation("글 삭제")
-    @ApiImplicitParam(name = "seq", value = "삭제할 글 번호", required = true)
+    @ApiImplicitParam(name = "seq", value = "삭제할 글 번호", required = true, example = "0")
     @DeleteMapping("/document/delete/{seq}")
     public String delete(@PathVariable int seq, HttpServletRequest request, Model model) {
         // 글 삭제
