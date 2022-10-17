@@ -29,4 +29,10 @@
         from member
         where id = #{id} and password = #{password}
     </delete>
+
+    <select id="getMember" resultType="MemberVO">
+        select *
+        from MEMBER
+        where ID = #{id}
+    </select>
 </mapper>

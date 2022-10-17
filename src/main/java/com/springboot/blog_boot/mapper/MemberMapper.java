@@ -13,4 +13,5 @@ public interface MemberMapper {
     public int sign_up(MemberVO member);
     public int updateMember(MemberVO member);
     public int withdrawal(Map<String, String> params);
+    public MemberVO getMember(String id);
 }
