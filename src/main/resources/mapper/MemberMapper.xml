@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.example.blog.mapper.MemberMapper">
+    <select id="sign_in" resultType="_boolean">
+        select case when count(*) > 0 then 1 else 0 end result
+        from member
+        where id = #{id} and password = #{password}
+    </select>
+
+    <select id="isDuplicated" resultType="_boolean">
+        select case when count(*) > 0 then 1 else 0 end result
+        from member
+        where id = #{id}
+    </select>
+
+    <insert id="sign_up">
+        insert into member
+        values (#{id}, #{password}, #{name}, #{phone}, #{department}, sysdate)
+    </insert>
+
+    <update id="updateMember">
+        update member
+        set password = #{password}, name = #{name}, phone = #{phone}, department = #{department}
+        where id = #{id}
+    </update>
+
+    <delete id="withdrawal">
+        delete
+        from member
+        where id = #{id} and password = #{password}
+    </delete>
+</mapper>

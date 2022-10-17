@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.example.blog.mapper.CategoryMapper">
+    <select id="getCategories" resultType="CategoryVO">
+        select *
+        from CATEGORY
+    </select>
+
+    <select id="getCategory" resultType="CategoryVO">
+        select *
+        from CATEGORY
+        where CATEGORY_ID = #{category_id}
+    </select>
+
+    <insert id="addCategory">
+        insert into CATEGORY
+        values (CAT_SEQ.nextval, #{name})
+        <selectKey keyProperty="category_id" resultType="int" order="AFTER">
+            select CAT_SEQ.currval as category_id
+            from DUAL
+        </selectKey>
+    </insert>
+
+    <update id="updateCategory">
+        update CATEGORY
+        set NAME = #{name}
+        where CATEGORY_ID = #{category_id}
+    </update>
+
+    <delete id="deleteCategory">
+        delete
+        from CATEGORY
+        where CATEGORY_ID = #{category_id}
+    </delete>
+</mapper>
