@@ -168,7 +168,7 @@ public class BoardController {
             Model model) throws IOException {
         // 글 작성
         int result = -1;
-        StringBuilder dir = new StringBuilder("D:\\blog\\img\\"); // 썸네일 저장경로
+        StringBuilder dir = new StringBuilder("D:\\blog\\img\\"); // 썸네일 저장경로 / jar로 배포하는 springboot 프로젝트는 context.getRealPath() 사용 시 임시 폴더에 저장되어 절대경로로 설정
         String filename = null; // 썸네일 파일 명
 
         Files.createDirectories(Paths.get(dir.toString()));    // 썸네일을 저장할 디렉토리가 없으면 생성
@@ -216,7 +216,7 @@ public class BoardController {
         // 글 수정
         int result = -1;
         BoardVO document = boardDao.getDocument(seq);
-        StringBuilder dir = new StringBuilder("D:\\blog\\img\\"); // 썸네일 저장경로
+        StringBuilder dir = new StringBuilder("D:\\blog\\img\\"); // 썸네일 저장경로 / jar로 배포하는 springboot 프로젝트는 context.getRealPath() 사용 시 임시 폴더에 저장되어 절대경로로 설정
         String filename; // 썸네일 파일 명
 
         Files.createDirectories(Paths.get(dir.toString()));    // 썸네일을 저장할 디렉토리가 없으면 생성
