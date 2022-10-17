@@ -2,6 +2,8 @@ package com.springboot.blog_boot.controller;
 
 import com.springboot.blog_boot.domain.BoardVO;
 import com.springboot.blog_boot.mapper.BoardMapper;
+import com.springboot.blog_boot.result.DeleteDocumentResult;
+import com.springboot.blog_boot.result.LikeDocumentResult;
 import io.swagger.annotations.*;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +89,7 @@ public class BoardController {
             @ApiImplicitParam(name = "seq", value = "추천할 글 번호", required = true, example = "0")
     })
     @PostMapping("/document/{seq}/like")
-    public String post_like(@PathVariable int seq, @RequestParam(required = false) String id, HttpServletRequest request, Model model) {
+    public LikeDocumentResult post_like(@PathVariable int seq, @RequestParam(required = false) String id, HttpServletRequest request, Model model) {
         /*
          * 글 추천
          * result 값에 따른 결과
@@ -106,16 +108,16 @@ public class BoardController {
             input.put("id", id);
         }
 
-        if (boardDao.isLike(input)) {
-            result = 0;
-        } else {
-            result = boardDao.like(input);
+        if (id == null) {   // 로그인 중이 아닐 때
+            id = request.getRemoteAddr();   // ip 가져오기
         }
+
+        input.put("id", id);
 
         boardDao.updateLikeCnt(seq);
         model.addAttribute("result", result);
 
-        return "추천 결과 : " + result;
+        return new LikeDocumentResult("추천", seq, id, result);
     }
 
     @ApiOperation("글 추천 취소")
@@ -124,7 +126,7 @@ public class BoardController {
             @ApiImplicitParam(name = "seq", value = "추천 취소할 글 번호", required = true, example = "0")
     })
     @DeleteMapping("/document/{seq}/like")
-    public String delete_like(@PathVariable int seq, @RequestParam(required = false) String id, HttpServletRequest request, Model model) {
+    public LikeDocumentResult delete_like(@PathVariable int seq, @RequestParam(required = false) String id, HttpServletRequest request, Model model) {
         /*
          * 글 추천 취소
          * result 값에 따른 결과
@@ -138,17 +140,17 @@ public class BoardController {
         input.put("seq", seq);
 
         if (id == null) {   // 로그인 중이 아닐 때
-            input.put("id", request.getRemoteAddr());   // ip 가져오기
-        } else {    // 로그인 중일 때
-            input.put("id", id);
+            id = request.getRemoteAddr();   // ip 가져오기
         }
+
+        input.put("id", id);
 
         result = boardDao.cancelLike(input);
 
         boardDao.updateLikeCnt(seq);
         model.addAttribute("result", result);
 
-        return "추천 취소 결과 : " + result;
+        return new LikeDocumentResult("추천 취소", seq, id, result);
     }
 
     @ApiOperation("글 작성")
@@ -247,7 +249,7 @@ public class BoardController {
     @ApiOperation("글 삭제")
     @ApiImplicitParam(name = "seq", value = "삭제할 글 번호", required = true, example = "0")
     @DeleteMapping("/document/delete/{seq}")
-    public String delete(@PathVariable int seq, HttpServletRequest request, Model model) {
+    public DeleteDocumentResult delete(@PathVariable int seq, HttpServletRequest request, Model model) {
         // 글 삭제
         String thumbnail = boardDao.getDocument(seq).getThumbnail();
         if (thumbnail != null && !thumbnail.isBlank()) {
@@ -255,8 +257,9 @@ public class BoardController {
             realFile.delete();
         }
 
-        model.addAttribute("result", boardDao.delete(seq) > 0);
+        boolean result = boardDao.delete(seq) > 0;
+        model.addAttribute("result", result);
 
-        return "글 삭제 결과 : " + model.getAttribute("result");
+        return new DeleteDocumentResult(seq, result);
     }
 }

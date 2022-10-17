@@ -2,6 +2,7 @@ package com.springboot.blog_boot.controller;
 
 import com.springboot.blog_boot.domain.CategoryVO;
 import com.springboot.blog_boot.mapper.CategoryMapper;
+import com.springboot.blog_boot.result.DeleteCategoryResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -52,11 +53,11 @@ public class CategoryController {
     @ApiOperation("카테고리 삭제")
     @ApiImplicitParam(name = "category_id", value = "삭제할 카테고리 번호", required = true, paramType = "path")
     @DeleteMapping("/delete/{category_id}")
-    public String deleteCategory(@PathVariable int category_id, Model model) {
+    public DeleteCategoryResult deleteCategory(@PathVariable int category_id, Model model) {
         int result = categoryDao.deleteCategory(category_id);
 
         model.addAttribute("result", result);
 
-        return "카테고리 삭제 결과 : " + (result > 0);
+        return new DeleteCategoryResult(category_id, result > 0);
     }
 }
