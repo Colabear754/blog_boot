@@ -108,7 +108,6 @@ public class BoardController {
             result = boardDao.like(input);
         }
 
-        boardDao.updateLikeCnt(seq);
         model.addAttribute("result", result);
 
         return new LikeDocumentResult("추천", seq, id, result);
@@ -136,7 +135,6 @@ public class BoardController {
 
         int result = boardDao.cancelLike(input);
 
-        boardDao.updateLikeCnt(seq);
         model.addAttribute("result", result);
 
         return new LikeDocumentResult("추천 취소", seq, id, result);

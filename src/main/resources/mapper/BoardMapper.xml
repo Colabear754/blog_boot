@@ -6,8 +6,8 @@
         from (
             select rownum r, b.*
             from (
-                select board.*
-                from board
+                select v_board.*
+                from v_board
                 <choose>
                     <when test="category_id gt 0">
                         where CATEGORY_ID = #{category_id}
@@ -16,15 +16,15 @@
                         where CATEGORY_ID is null
                     </when>
                 </choose>
-                order by board.seq desc
+                order by v_board.seq desc
             ) b
         ) a
         <![CDATA[where r >= #{start} and r <= #{end}]]>
     </select>
 
     <select id="getDocument" resultType="BoardVO">
-        select *
-        from board
+        select v_board.*
+        from v_board
         where seq = #{seq}
     </select>
 
@@ -89,25 +89,9 @@
         where ID = #{id} and SEQ = #{seq}
     </delete>
 
-    <select id="getLikeCount" resultType="_int">
-        select count(*)
-        from LIKE_DOCUMENT
-        where SEQ = #{seq}
-    </select>
-
     <update id="increaseViewCnt">
         update BOARD
         set VIEW_CNT = VIEW_CNT + 1
-        where SEQ = #{seq}
-    </update>
-
-    <update id="updateLikeCnt">
-        update BOARD
-        set LIKE_CNT = (
-            select count(*)
-            from LIKE_DOCUMENT
-            where SEQ = #{seq}
-        )
         where SEQ = #{seq}
     </update>
 </mapper>

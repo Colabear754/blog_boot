@@ -17,7 +17,5 @@ public interface BoardMapper {
     public boolean isLike(Map<String, Object> params);
     public int like(Map<String, Object> params);
     public int cancelLike(Map<String, Object> params);
-    public int getLikeCount(int seq);
     public int increaseViewCnt(int seq);
-    public int updateLikeCnt(int seq);
 }
