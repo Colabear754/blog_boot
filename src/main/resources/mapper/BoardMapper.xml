@@ -44,10 +44,10 @@
     <insert id="write">
         insert into board
         <if test="category_id == 0">
-            values (DOC_SEQ.nextval, systimestamp, null, #{subject}, #{content}, #{thumbnail}, 0, 0)
+            values (DOC_SEQ.nextval, systimestamp, null, #{subject}, #{content}, #{thumbnail}, 0)
         </if>
         <if test="category_id > 0">
-            values (DOC_SEQ.nextval, systimestamp, #{category_id}, #{subject}, #{content}, #{thumbnail}, 0, 0)
+            values (DOC_SEQ.nextval, systimestamp, #{category_id}, #{subject}, #{content}, #{thumbnail}, 0)
         </if>
         <selectKey keyProperty="seq" resultType="int" order="AFTER">
             select DOC_SEQ.currval as seq
